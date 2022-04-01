@@ -1,5 +1,5 @@
-import { IClientRequest, IClientResponse } from '@vank/shared-types';
+import { IClient, IClientResponse } from '@vank/shared-types';
 
 export interface ClientRepository {
-  createClient(client: IClientRequest): Promise<IClientResponse>;
+  createClient(client: IClient): Promise<IClientResponse>;
 }
