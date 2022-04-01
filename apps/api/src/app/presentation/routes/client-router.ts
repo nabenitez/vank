@@ -8,7 +8,22 @@ export default function ClientsRouter(
 
   router.post('/', async (req: Request, res: Response) => {
     try {
-      await createClientUseCase.execute(req.body);
+      const {
+        companyName,
+        internalCode,
+        tributaryId,
+        currency,
+        monthlyApiCallsFee,
+        allowedBanks,
+      } = req.body;
+      await createClientUseCase.execute({
+        companyName,
+        internalCode,
+        tributaryId,
+        currency,
+        monthlyApiCallsFee,
+        allowedBanks,
+      });
       res.statusCode = 201;
       res.json({ message: 'client created' });
     } catch (err) {
