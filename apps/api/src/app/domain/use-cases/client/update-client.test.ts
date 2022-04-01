@@ -1,6 +1,6 @@
 import { IClient, IClientUpdate } from '@vank/shared-types';
 import { ClientRepository } from '../../interfaces/repositories/client-repository';
-import { CreateClient } from './create-client';
+import { UpdateClient } from './update-client';
 
 describe('Create client Use case', () => {
   class MockClientRepository implements ClientRepository {
@@ -19,20 +19,17 @@ describe('Create client Use case', () => {
     mockClientRepository = new MockClientRepository();
   });
 
-  test('should return data', async () => {
+  test('should return true', async () => {
     const inputData = {
-      companyName: 'internal company',
-      internalCode: 'aa12345',
+      id: 'id',
       tributaryId: 'idtribu',
-      currency: 'USD',
-      monthlyApiCallsFee: 100,
-      allowedBanks: [1, 2, 3],
+      currency: 'CLP',
     };
     jest
-      .spyOn(mockClientRepository, 'createClient')
-      .mockImplementation(() => Promise.resolve(inputData));
-    const createClientUse = new CreateClient(mockClientRepository);
-    const result = await createClientUse.execute(inputData);
-    expect(result).toBe(inputData);
+      .spyOn(mockClientRepository, 'updateClient')
+      .mockImplementation(() => Promise.resolve(true));
+    const updateClientUse = new UpdateClient(mockClientRepository);
+    const result = await updateClientUse.execute(inputData);
+    expect(result).toBe(true);
   });
 });
