@@ -1,5 +1,6 @@
-import { IClient } from '@vank/shared-types';
+import { IClient, IClientUpdate } from '@vank/shared-types';
 
 export interface ClientDataSource {
   create(client: IClient): Promise<IClient>;
+  update(fields: IClientUpdate): Promise<boolean>;
 }
