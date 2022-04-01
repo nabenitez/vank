@@ -48,10 +48,8 @@ describe('MongoDB datasource', () => {
 
     const result = await clientDataSource.update(inputData);
 
-    expect(mockDatabase.updateOne).toHaveBeenCalledWith(
-      inputData.id,
-      inputData
-    );
+    const { id, ...rest } = inputData;
+    expect(mockDatabase.updateOne).toHaveBeenCalledWith(id, rest);
     expect(result).toBe(true);
   });
 });
