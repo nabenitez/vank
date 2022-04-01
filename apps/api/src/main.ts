@@ -3,12 +3,11 @@
  * This is only a minimal backend to get started.
  */
 
-import * as express from 'express';
+import server from './app/infrastructure/server';
 
 (async () => {
-  const app = express();
   const port = process.env.PORT || 3333;
-  const server = app.listen(port, () => {
+  server.listen(port, () => {
     console.log(`Listening at http://localhost:${port}/api`);
   });
   server.on('error', console.error);
