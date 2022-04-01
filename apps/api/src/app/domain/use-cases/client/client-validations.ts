@@ -1,7 +1,7 @@
 import { body } from 'express-validator';
-import { IClient } from '@vank/shared-types';
+import { IClient, IClientUpdate } from '@vank/shared-types';
 
-export function getClientValidations() {
+export function getCreateClientValidations() {
   return [
     body('companyName').isString().isLength({ max: 80 }),
     body('internalCode').isString().isLength({ max: 80 }),
@@ -9,6 +9,14 @@ export function getClientValidations() {
     body('currency').custom(validateCurrency),
     body('monthlyApiCallsFee').isInt(),
     body('allowedBanks').isArray().notEmpty().isInt(),
+  ];
+}
+
+export function getUpdateClientValidations() {
+  return [
+    body('id').isString().notEmpty(),
+    body('tributaryId').isString().isLength({ max: 80 }).optional(),
+    body('currency').custom(validateCurrency).optional(),
   ];
 }
 
@@ -20,6 +28,15 @@ export function getFilteredClient(requestBody: IClient): IClient {
     currency: requestBody.currency,
     monthlyApiCallsFee: requestBody.monthlyApiCallsFee,
     allowedBanks: requestBody.allowedBanks,
+  };
+}
+
+export function getFilteredClientUpdate(
+  requestBody: IClientUpdate
+): IClientUpdate {
+  return {
+    tributaryId: requestBody.tributaryId,
+    currency: requestBody.currency,
   };
 }
 

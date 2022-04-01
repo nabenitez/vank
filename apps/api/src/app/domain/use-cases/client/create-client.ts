@@ -1,6 +1,6 @@
 import { IClient } from '@vank/shared-types';
 import { ClientRepository } from '../../interfaces/repositories/client-repository';
-import { CreateClientUseCase } from '../../interfaces/use-cases/create-client';
+import { CreateClientUseCase } from '../../interfaces/use-cases/client/create-client';
 
 export class CreateClient implements CreateClientUseCase {
   clientRepository: ClientRepository;

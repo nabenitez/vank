@@ -11,3 +11,8 @@ export interface IClient {
 export interface IClientResponse {
   message: string;
 }
+
+export interface IClientUpdate {
+  tributaryId: string;
+  currency: string;
+}
