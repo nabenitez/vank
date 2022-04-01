@@ -35,7 +35,6 @@ export default function ClientsRouter(
     validate(getUpdateClientValidations()),
     async (req: Request, res: Response) => {
       try {
-        console.log('executing patch');
         const filteredClient = getFilteredClientUpdate(req.body);
         await updateClientUseCase.execute(filteredClient);
         res.sendStatus(204);
