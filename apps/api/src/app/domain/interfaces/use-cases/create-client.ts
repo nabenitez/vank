@@ -1,5 +1,5 @@
-import { IClient, IClientResponse } from '@vank/shared-types';
+import { IClient } from '@vank/shared-types';
 
 export interface CreateClientUseCase {
-  execute(client: IClient): Promise<IClientResponse>;
+  execute(client: IClient): Promise<IClient>;
 }

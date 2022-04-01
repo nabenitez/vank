@@ -1,11 +1,11 @@
 import request from 'supertest';
 import { CreateClientUseCase } from '../../domain/interfaces/use-cases/create-client';
-import { IClientResponse } from '@vank/shared-types';
+import { IClient } from '@vank/shared-types';
 import ClientRouter from './client-router';
 import server from '../../infrastructure/server';
 
 class MockCreateClientUseCase implements CreateClientUseCase {
-  execute(): Promise<IClientResponse> {
+  execute(): Promise<IClient> {
     throw new Error('Method not implemented');
   }
 }
@@ -31,12 +31,11 @@ describe('Contact Router', () => {
       monthlyApiCallsFee: 100,
       allowedBanks: [1, 2, 3],
     };
+
     test('POST /client', async () => {
       jest
         .spyOn(mockCreateClientUseCase, 'execute')
-        .mockImplementation(() =>
-          Promise.resolve({ message: 'client created' })
-        );
+        .mockImplementation(() => Promise.resolve(inputData));
       const response = await request(server).post('/client').send(inputData);
       expect(response.body.message).toBe('client created');
       expect(response.status).toBe(201);
