@@ -13,6 +13,7 @@ export interface IClientResponse {
 }
 
 export interface IClientUpdate {
+  id: string;
   tributaryId: string;
   currency: string;
 }
