@@ -35,13 +35,17 @@ export function getFilteredClientUpdate(
   requestBody: IClientUpdate
 ): IClientUpdate {
   return {
+    id: requestBody.id,
     tributaryId: requestBody.tributaryId,
     currency: requestBody.currency,
   };
 }
 
 function validateCurrency(value) {
+  /* istanbul ignore next */
   if (!['CLP', 'USD', 'EUR'].includes(value))
+    //needs E2E tests
+    /* istanbul ignore next */
     throw new Error('currency is not valid');
   return true;
 }
