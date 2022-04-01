@@ -1,4 +1,4 @@
-export interface IClientRequest {
+export interface IClient {
   companyName: string;
   internalCode: string;
   tributaryId: string;
