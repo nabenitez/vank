@@ -1,3 +1,4 @@
+import { IClient } from '@vank/shared-types';
 import { Request, Response, Router } from 'express';
 import { CreateClientUseCase } from '../../domain/interfaces/use-cases/create-client';
 
@@ -8,22 +9,8 @@ export default function ClientsRouter(
 
   router.post('/', async (req: Request, res: Response) => {
     try {
-      const {
-        companyName,
-        internalCode,
-        tributaryId,
-        currency,
-        monthlyApiCallsFee,
-        allowedBanks,
-      } = req.body;
-      await createClientUseCase.execute({
-        companyName,
-        internalCode,
-        tributaryId,
-        currency,
-        monthlyApiCallsFee,
-        allowedBanks,
-      });
+      const filteredClient = getFilteredClient(req.body);
+      await createClientUseCase.execute(filteredClient);
       res.statusCode = 201;
       res.json({ message: 'client created' });
     } catch (err) {
@@ -32,4 +19,15 @@ export default function ClientsRouter(
   });
 
   return router;
+}
+
+function getFilteredClient(requestBody: IClient): IClient {
+  return {
+    companyName: requestBody.companyName,
+    internalCode: requestBody.internalCode,
+    tributaryId: requestBody.tributaryId,
+    currency: requestBody.currency,
+    monthlyApiCallsFee: requestBody.monthlyApiCallsFee,
+    allowedBanks: requestBody.allowedBanks,
+  };
 }
