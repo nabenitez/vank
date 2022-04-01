@@ -1,4 +1,4 @@
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import { MongoClient, ServerApiVersion, ObjectId } from 'mongodb';
 import { NoSQLDatabaseWrapper } from '../data/interfaces/nosql-database-wrapper';
 import { MongoDBClientDataSource } from '../data/data-sources/mongodb-client-data-source';
 const { MONGO_DB_URI } = process.env;
@@ -13,6 +13,11 @@ export async function getMongoDBDS() {
 
   const clientDatabase: NoSQLDatabaseWrapper = {
     insertOne: (doc) => clientsDB.collection('clients').insertOne(doc),
+    updateOne: (id, data) => {
+      return clientsDB
+        .collection('clients')
+        .updateOne({ _id: new ObjectId(id) }, { $set: data });
+    },
   };
 
   return new MongoDBClientDataSource(clientDatabase);

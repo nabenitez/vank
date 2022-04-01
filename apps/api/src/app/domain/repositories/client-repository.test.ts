@@ -1,10 +1,13 @@
 import { ClientDataSource } from '../../data/interfaces/client-data-source';
-import { IClient } from '@vank/shared-types';
+import { IClient, IClientUpdate } from '@vank/shared-types';
 import { ClientRepository } from '../interfaces/repositories/client-repository';
 import { ClientRepositoryImpl } from './client-repository';
 
 class MockClientDataSource implements ClientDataSource {
   create(client: IClient): Promise<IClient> {
+    throw new Error('Method not implemented.');
+  }
+  update(fields: IClientUpdate): Promise<boolean> {
     throw new Error('Method not implemented.');
   }
 }
@@ -34,6 +37,21 @@ describe('Client repository', () => {
         .mockImplementation(() => Promise.resolve(inputData));
       await clientRepository.createClient(inputData);
       expect(mockClientDataSource.create).toHaveBeenCalledWith(inputData);
+    });
+  });
+
+  describe('updateClient', () => {
+    test('should make update call', async () => {
+      const inputData = {
+        id: 'test-id',
+        tributaryId: 'idtribu',
+        currency: 'USD',
+      };
+      jest
+        .spyOn(mockClientDataSource, 'update')
+        .mockImplementation(() => Promise.resolve(true));
+      await clientRepository.updateClient(inputData);
+      expect(mockClientDataSource.update).toHaveBeenCalledWith(inputData);
     });
   });
 });
