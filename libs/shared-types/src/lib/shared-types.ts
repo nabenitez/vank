@@ -1,10 +1,7 @@
-type Currency = 'USD' | 'EUR' | 'CLP';
-
 export interface IClient {
   companyName: string;
   internalCode: string;
   tributaryId: string;
-  // currency: "USD" | "EUR" | "CLP";
   currency: string;
   monthlyApiCallsFee: number;
   allowedBanks: number[];
@@ -23,7 +20,7 @@ export interface IClientUpdate {
 export interface IInvoiceFilter {
   vendor?: number;
   invoiceDate?: string;
-  currency?: Currency;
+  currency?: string;
 }
 
 export interface IInvoiceResponse {
