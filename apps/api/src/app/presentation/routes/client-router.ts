@@ -11,7 +11,7 @@ import { validate } from '@vank/request-validator';
 
 export default function ClientsRouter(
   createClientUseCase: CreateClientUseCase,
-  updateClientUseCase?: UpdateClientUseCase
+  updateClientUseCase: UpdateClientUseCase
 ) {
   const router = Router();
 
