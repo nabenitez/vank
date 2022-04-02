@@ -8,7 +8,7 @@ export class GetInvoices implements GetInvoicesUseCase {
     this.invoiceRepository = invoiceRepository;
   }
 
-  async execute(filter?: IInvoiceFilter): Promise<IInvoiceResponse[]> {
+  async execute(filter: IInvoiceFilter): Promise<IInvoiceResponse[]> {
     return await this.invoiceRepository.getInvoices(filter);
   }
 }

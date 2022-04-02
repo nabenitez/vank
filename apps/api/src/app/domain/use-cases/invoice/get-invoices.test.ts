@@ -35,7 +35,8 @@ describe('Get invoices use case', () => {
       .spyOn(mockInvoiceRepository, 'getInvoices')
       .mockImplementation(() => Promise.resolve(invoicesData));
     const getInvoicesUseCase = new GetInvoices(mockInvoiceRepository);
-    const result = await getInvoicesUseCase.execute();
+    const filter = {};
+    const result = await getInvoicesUseCase.execute(filter);
     expect(result).toBe(invoicesData);
   });
 });
