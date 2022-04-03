@@ -68,9 +68,7 @@ describe('Invoice redis datasource', () => {
       jest
         .spyOn(mockCacheClient, 'get')
         .mockImplementationOnce(() => Promise.resolve(null))
-        .mockImplementationOnce(() =>
-          Promise.resolve(JSON.stringify(cacheResult))
-        );
+        .mockImplementationOnce(() => Promise.resolve(cacheResult));
       const query: IInvoiceFilter = { vendor: 34 };
       const filter = getFilteredQuery(query);
       const invoicesKey = 'invoices';
@@ -88,9 +86,7 @@ describe('Invoice redis datasource', () => {
       jest
         .spyOn(mockCacheClient, 'get')
         .mockImplementationOnce(() => Promise.resolve(null))
-        .mockImplementationOnce(() =>
-          Promise.resolve(JSON.stringify(cacheResult))
-        );
+        .mockImplementationOnce(() => Promise.resolve(cacheResult));
       const query: IInvoiceFilter = { invoiceDate: '01-FEB-15,01-FEB-19' };
       const filter = getFilteredQuery(query);
       const invoicesKey = 'invoices';
