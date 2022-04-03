@@ -9,7 +9,23 @@ import {
 } from '../../data/interfaces/conversion-rates-api-data-source';
 import { InvoiceRepository } from '../interfaces/repositories/invoice-repository';
 import { InvoiceRepositoryImpl } from './invoice-repository';
+import { ClientRepositoryImpl } from '../repositories/client-repository';
 import { IInvoiceFilter, IInvoiceResponse } from '@vank/shared-types';
+import { ClientDataSource } from '../../data/interfaces/client-data-source';
+import { IClient, IClientUpdate } from '@vank/shared-types';
+import { ClientRepository } from '../interfaces/repositories/client-repository';
+
+class MockClientDataSource implements ClientDataSource {
+  create(client: IClient): Promise<IClient> {
+    throw new Error('Method not implemented.');
+  }
+  update(fields: IClientUpdate): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
+  get(internalCode: string): Promise<IClient> {
+    throw new Error('Method not implemented.');
+  }
+}
 
 class MockInvoiceDataSource implements InvoiceDataSource {
   getAll(filter: IInvoiceFilter): Promise<IInvoiceResponse[]> {
@@ -38,17 +54,22 @@ describe('Invoice repository', () => {
   let mockInvoiceDataSource: MockInvoiceDataSource;
   let mockInvoiceAPIDataSource: MockInvoiceAPIDataSource;
   let mockConversionRatesAPIDataSource: MockConversionRatesAPIDataSource;
+  let mockClientDataSource: MockClientDataSource;
   let invoiceRepository: InvoiceRepository;
+  let clientRepository: ClientRepositoryImpl;
 
   beforeEach(() => {
     jest.clearAllMocks();
     mockInvoiceDataSource = new MockInvoiceDataSource();
     mockInvoiceAPIDataSource = new MockInvoiceAPIDataSource();
     mockConversionRatesAPIDataSource = new MockConversionRatesAPIDataSource();
+    mockClientDataSource = new MockClientDataSource();
+    clientRepository = new ClientRepositoryImpl(mockClientDataSource);
     invoiceRepository = new InvoiceRepositoryImpl(
       mockInvoiceAPIDataSource,
       mockInvoiceDataSource,
-      mockConversionRatesAPIDataSource
+      mockConversionRatesAPIDataSource,
+      clientRepository
     );
   });
 
@@ -67,15 +88,36 @@ describe('Invoice repository', () => {
       },
     ];
 
+    const expectedUser = {
+      companyName: 'internal company',
+      internalCode: 'aa12345',
+      tributaryId: 'idtribu',
+      currency: 'USD',
+      monthlyApiCallsFee: 100,
+      allowedBanks: [1, 2, 3],
+    };
+
+    jest
+      .spyOn(mockClientDataSource, 'get')
+      .mockImplementation(() => Promise.resolve(expectedUser));
+
     jest
       .spyOn(mockInvoiceDataSource, 'getAll')
       .mockImplementation(() => Promise.resolve(expectedData));
 
     const filter = { vendor: 1 };
-    const getInvoicesResult = await invoiceRepository.getInvoices(filter);
+    const getInvoicesResult = await invoiceRepository.getInvoices(
+      filter,
+      'test-1'
+    );
     console.log('get invoices result', getInvoicesResult);
     expect(getInvoicesResult).toStrictEqual(expectedData);
-    expect(mockInvoiceDataSource.getAll).toHaveBeenCalledWith(filter);
+    expect(mockInvoiceDataSource.getAll).toHaveBeenCalledWith(
+      filter,
+      expectedUser.allowedBanks,
+      expectedUser.currency,
+      'test-1'
+    );
   });
 
   test('should make a get call to invoices api', async () => {
@@ -132,5 +174,17 @@ describe('Invoice repository', () => {
       .mockImplementation(() => Promise.resolve(getResult));
     const updateResult = await invoiceRepository.updateConversionRates();
     expect(updateResult).toBe(true);
+  });
+
+  test("should fail if user doesn't exists", async () => {
+    jest
+      .spyOn(mockClientDataSource, 'get')
+      .mockImplementation(() => Promise.resolve(null));
+    try {
+      await invoiceRepository.getInvoices({}, 'test');
+    } catch (err) {
+      console.log('err messg', err.message);
+      expect(err.message).toBe('invalid internalCode');
+    }
   });
 });

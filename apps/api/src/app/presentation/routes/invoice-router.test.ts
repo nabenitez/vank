@@ -23,7 +23,7 @@ describe('Invoice router', () => {
   });
 
   describe('GET /invoice', () => {
-    test('GET /invoice', async () => {
+    test('GET /invoice/:internalCode should return the data', async () => {
       const invoicesData = [
         {
           invoiceId: 1,
@@ -38,7 +38,7 @@ describe('Invoice router', () => {
       jest
         .spyOn(mockGetInvoicesUseCase, 'execute')
         .mockImplementation(() => Promise.resolve(invoicesData));
-      const response = await request(server).get('/invoice');
+      const response = await request(server).get('/invoice/test-1');
       expect(response.body).toStrictEqual(invoicesData);
       expect(response.status).toBe(200);
     });
@@ -49,13 +49,13 @@ describe('Invoice router', () => {
         .mockImplementation(() =>
           Promise.reject(Error('error requesting invoices'))
         );
-      const response = await request(server).get('/invoice');
+      const response = await request(server).get('/invoice/test-1');
       expect(response.body.message).toBe('error requesting invoices');
       expect(response.status).toBe(500);
     });
   });
 
-  describe('GET /invoice with query params', () => {
+  describe('GET /invoice/:internalCode with query params', () => {
     test('use invalid params should fail', async () => {
       const expectedError = {
         errors: [
@@ -81,7 +81,7 @@ describe('Invoice router', () => {
       };
 
       const response = await request(server).get(
-        '/invoice?vendor=string&invoiceDate=1&currency=20'
+        '/invoice/test-1?vendor=string&invoiceDate=1&currency=20'
       );
 
       expect(response.body).toStrictEqual(expectedError);
@@ -100,7 +100,7 @@ describe('Invoice router', () => {
         ];
 
         const response = await request(server).get(
-          '/invoice?invoiceDate=date1,date2,date3'
+          '/invoice/test-1?invoiceDate=date1,date2,date3'
         );
 
         expect(response.body.errors).toStrictEqual(expectedErrors);
@@ -120,14 +120,14 @@ describe('Invoice router', () => {
         const startDate = '25-FEB-16';
         const endDate = '25-FEB-12';
         const response = await request(server).get(
-          `/invoice?invoiceDate=${startDate},${endDate}`
+          `/invoice/test-1?invoiceDate=${startDate},${endDate}`
         );
 
         expect(response.body.errors).toStrictEqual(expectedErrors);
         expect(response.status).toBe(400);
       });
 
-      test('should pass if invoiceDate is valid', async () => {
+      test('should return data if invoiceDate is valid', async () => {
         const startDate = '25-FEB-12';
         const endDate = '25-FEB-16';
 
@@ -148,7 +148,7 @@ describe('Invoice router', () => {
           .mockImplementation(() => Promise.resolve(invoicesData));
 
         const response = await request(server).get(
-          `/invoice?invoiceDate=${startDate},${endDate}`
+          `/invoice/test-1?invoiceDate=${startDate},${endDate}`
         );
 
         expect(response.body).toStrictEqual(invoicesData);

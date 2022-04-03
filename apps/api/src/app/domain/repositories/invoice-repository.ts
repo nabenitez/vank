@@ -2,6 +2,7 @@ import { InvoiceAPIDataSource } from '../../data/interfaces/invoice-api-data-sou
 import { InvoiceDataSource } from '../../data/interfaces/invoice-data-source';
 import { ConversionRatesAPIDataSource } from '../../data/interfaces/conversion-rates-api-data-source';
 import { InvoiceRepository } from '../interfaces/repositories/invoice-repository';
+import { ClientRepository } from '../interfaces/repositories/client-repository';
 import { IInvoiceFilter, IInvoiceResponse } from '@vank/shared-types';
 
 //this should update the redis data
@@ -9,21 +10,35 @@ export class InvoiceRepositoryImpl implements InvoiceRepository {
   invoiceAPIDS: InvoiceAPIDataSource;
   invoiceDS: InvoiceDataSource;
   invoiceConversionRatesDS: ConversionRatesAPIDataSource;
+  clientRepository: ClientRepository;
 
   constructor(
     invoiceAPIDS: InvoiceAPIDataSource,
     invoiceDS: InvoiceDataSource,
-    invoiceConversionRatesDS: ConversionRatesAPIDataSource
+    invoiceConversionRatesDS: ConversionRatesAPIDataSource,
+    clientRepository: ClientRepository
   ) {
     this.invoiceAPIDS = invoiceAPIDS;
     this.invoiceDS = invoiceDS;
     this.invoiceConversionRatesDS = invoiceConversionRatesDS;
+
+    this.clientRepository = clientRepository;
   }
 
   async getInvoices(
-    filter: IInvoiceFilter | null
+    filter: IInvoiceFilter,
+    internalCode: string
   ): Promise<IInvoiceResponse[]> {
-    return await this.invoiceDS.getAll(filter);
+    const user = await this.clientRepository.getClient(internalCode);
+    console.log('found user in db', user);
+    if (!user) throw new Error('invalid internalCode');
+    const { allowedBanks, currency } = user;
+    return await this.invoiceDS.getAll(
+      filter,
+      allowedBanks,
+      currency,
+      internalCode
+    );
   }
 
   async updateInvoices(): Promise<boolean> {

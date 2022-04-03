@@ -3,6 +3,15 @@
 import { ConversionRate } from '../../interfaces/conversion-rates-api-data-source';
 import { IInvoiceExternal } from '../../interfaces/invoice-api-data-source';
 
+export function filterByAllowedBanks(
+  invoices: IInvoiceExternal[],
+  allowedBanks: number[]
+) {
+  console.log('filtering by allowed banks');
+  console.log('allowedBanks in filter', allowedBanks);
+  return invoices.filter((invoice) => allowedBanks.includes(invoice.bankId));
+}
+
 export function filterByVendor(invoices: IInvoiceExternal[], vendorId: number) {
   if (vendorId) {
     console.log('filtering by vendor');
@@ -40,7 +49,7 @@ export function convertCurrency(
   rates: ConversionRate
 ) {
   // rates : {"CLP":{"EUR_CLP":869.601006,"USD_CLP":787.079441},"EUR":{"CLP_EUR":0.00115,"USD_EUR":0.905104},"USD":{"CLP_USD":0.001271,"EUR_USD":1.104845}}
-  if (currency) {
+  if (currency && invoices) {
     console.log('converting currency');
     if (currency === 'CLP') {
       return applyCurrencyConversion(currency, invoices, rates);
@@ -49,9 +58,10 @@ export function convertCurrency(
     } else if (currency === 'USD') {
       return applyCurrencyConversion(currency, invoices, rates);
     }
-    return invoices;
   }
+  /* istanbul ignore next */
   console.log('skipping convert currency');
+  /* istanbul ignore next */
   return invoices;
 }
 

@@ -26,7 +26,7 @@ describe('Get invoices use case', () => {
       .mockImplementation(() => Promise.resolve(invoicesData));
     const getInvoicesUseCase = new GetInvoices(mockInvoiceRepository);
     const filter = {};
-    const result = await getInvoicesUseCase.execute(filter);
+    const result = await getInvoicesUseCase.execute(filter, 'test-1');
     expect(result).toBe(invoicesData);
   });
 });

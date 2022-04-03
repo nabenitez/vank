@@ -1,4 +1,4 @@
-import { query } from 'express-validator';
+import { query, param } from 'express-validator';
 import { IInvoiceFilter } from '@vank/shared-types';
 import { validateCurrency } from '@vank/request-validator';
 
@@ -18,6 +18,7 @@ function validateInvoiceDate(invoiceDate: string) {
 
 export function getGetInvoicesValidations() {
   return [
+    param('internalCode').isString(),
     query('vendor').isInt().optional(),
     query('invoiceDate').custom(validateInvoiceDate).optional(),
     query('currency').isString().custom(validateCurrency).optional(),

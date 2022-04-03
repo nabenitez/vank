@@ -10,6 +10,9 @@ class MockClientDataSource implements ClientDataSource {
   update(fields: IClientUpdate): Promise<boolean> {
     throw new Error('Method not implemented.');
   }
+  get(internalCode: string): Promise<IClient> {
+    throw new Error('Method not implemented.');
+  }
 }
 
 describe('Client repository', () => {

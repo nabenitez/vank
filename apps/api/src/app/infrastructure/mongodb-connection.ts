@@ -21,6 +21,7 @@ export async function getMongoDBDS() {
         .collection('clients')
         .updateOne({ _id: new ObjectId(id) }, { $set: data });
     },
+    find: (query) => clientsDB.collection('clients').findOne(query),
   };
 
   return new MongoDBClientDataSource(clientDatabase);

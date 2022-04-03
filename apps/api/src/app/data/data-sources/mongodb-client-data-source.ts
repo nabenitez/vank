@@ -13,9 +13,15 @@ export class MongoDBClientDataSource implements ClientDataSource {
     const result = await this.db.insertOne(client);
     return result;
   }
+
   async update(fields: IClientUpdate) {
     const { id, ...rest } = fields;
     await this.db.updateOne(id, rest);
     return true;
+  }
+
+  async get(internalCode: string) {
+    const query = { internalCode };
+    return await this.db.find(query);
   }
 }

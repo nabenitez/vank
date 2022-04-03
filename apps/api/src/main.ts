@@ -16,9 +16,10 @@ import schedule from 'node-schedule';
 
 (async () => {
   const clientDataSource = await getMongoDBDS();
+  const clientRepository = new ClientRepositoryImpl(clientDataSource);
   const clientMiddleware = ClientRouter(
-    new CreateClient(new ClientRepositoryImpl(clientDataSource)),
-    new UpdateClient(new ClientRepositoryImpl(clientDataSource))
+    new CreateClient(clientRepository),
+    new UpdateClient(clientRepository)
   );
 
   const invoiceExternalDataSource = await getInvoicesAPI();
@@ -28,7 +29,8 @@ import schedule from 'node-schedule';
   const invoiceRepository = new InvoiceRepositoryImpl(
     invoiceExternalDataSource,
     redisInvoiceDataSource,
-    conversionRatesDataSource
+    conversionRatesDataSource,
+    clientRepository
   );
 
   const invoiceMiddleware = InvoiceRouter(new GetInvoices(invoiceRepository));

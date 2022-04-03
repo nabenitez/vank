@@ -5,6 +5,7 @@ import {
   filterByVendor,
   filterByDate,
   convertCurrency,
+  filterByAllowedBanks,
 } from './helpers/invoice-filter.helper';
 
 export class RedisInvoiceDataSource implements InvoiceDataSource {
@@ -16,43 +17,53 @@ export class RedisInvoiceDataSource implements InvoiceDataSource {
     this.invoicesKey = invoicesKey;
   }
 
-  async getAll(filter: IInvoiceFilter | null): Promise<IInvoiceResponse[]> {
-    if (filter) {
-      // if filter should find in cache
-      console.log('filter in getAll', filter);
-      const { vendor, invoiceDate, currency } = filter;
+  async getAll(
+    filter: IInvoiceFilter | null,
+    allowedBanks: number[],
+    defaultCurrency: string,
+    internalCode: string
+  ): Promise<IInvoiceResponse[]> {
+    // if filter should find in cache
+    console.log('filter in getAll', filter);
+    console.log('allowedBanks', allowedBanks);
+    console.log('defaultCurrency', defaultCurrency);
 
-      // find query in cache
-      const searchKey = JSON.stringify(filter);
-      console.log('searchKey', searchKey);
-      const queryInCache = await this.cacheClient.get(searchKey);
-      if (queryInCache) return JSON.parse(queryInCache);
-      console.log('query not found in cache');
+    const { vendor, invoiceDate, currency } = filter;
 
-      // if not result in cache should get all invoices and filter the data
-      const allInvoicesInCache = await this.cacheClient.get(this.invoicesKey);
+    const outputCurrency = currency || defaultCurrency;
+    filter.currency = outputCurrency;
 
-      const invoices = JSON.parse(allInvoicesInCache);
+    // find query in cache
+    const searchKey = `${internalCode}-${JSON.stringify(filter)}`;
+    console.log('searchKey', searchKey);
 
-      // function only applies if param is defined
-      const filteredByVendor = filterByVendor(invoices, vendor);
-      const filteredByDate = filterByDate(filteredByVendor, invoiceDate);
+    const queryInCache = await this.cacheClient.get(searchKey);
+    if (queryInCache) return JSON.parse(queryInCache);
+    console.log('query not found in cache');
 
-      const conversionRates = JSON.parse(
-        await this.cacheClient.get('conversionRates')
-      );
-      console.log('found conversionRates', conversionRates);
-      const convertedCurrency = convertCurrency(
-        filteredByDate,
-        currency,
-        conversionRates
-      );
-      await this.cacheClient.set(searchKey, JSON.stringify(convertedCurrency));
-      return convertedCurrency;
-    } else {
-      const result = await this.cacheClient.get(this.invoicesKey);
-      return JSON.parse(result);
-    }
+    // if not result in cache should get all invoices and filter the data
+    const allInvoicesInCache = await this.cacheClient.get(this.invoicesKey);
+    const invoices = JSON.parse(allInvoicesInCache);
+
+    // retrieve conversion rates
+    const conversionRates = JSON.parse(
+      await this.cacheClient.get('conversionRates')
+    );
+
+    const filteredByAllowedBanks = filterByAllowedBanks(invoices, allowedBanks);
+
+    const invoicesConverted = convertCurrency(
+      filteredByAllowedBanks,
+      outputCurrency,
+      conversionRates
+    );
+
+    // function only applies if param is defined
+    const filteredByVendor = filterByVendor(invoicesConverted, vendor);
+    const filteredByDate = filterByDate(filteredByVendor, invoiceDate);
+
+    await this.cacheClient.set(searchKey, JSON.stringify(filteredByDate));
+    return filteredByDate;
   }
 
   async updateAll(invoices: string): Promise<boolean> {

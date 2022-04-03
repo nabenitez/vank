@@ -12,8 +12,10 @@ export default function InvoiceRouter(getInvoicesUseCase: GetInvoicesUseCase) {
   /**
    * query can receive the following params: invoiceDate, currency, vendor
    */
+  // TODO: client can access only to the allowed banks
+  // should send tributaryId to return specific invoices
   router.get(
-    '/',
+    '/:internalCode',
     validate(getGetInvoicesValidations()),
     async (req: Request, res: Response) => {
       try {
@@ -22,11 +24,13 @@ export default function InvoiceRouter(getInvoicesUseCase: GetInvoicesUseCase) {
           (param) => param === undefined
         );
         const invoices = await getInvoicesUseCase.execute(
-          nonFilter ? null : filteredParams
+          nonFilter ? {} : filteredParams,
+          req.params.internalCode
         );
         res.statusCode = 200;
         res.send(invoices);
       } catch (err) {
+        console.error('error-requesting-invoices', err.message);
         res.status(500).send({ message: 'error requesting invoices' });
       }
     }
