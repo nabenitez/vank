@@ -22,21 +22,21 @@ describe('Invoice external datasource', () => {
 
     const expectedResult = [
       {
-        invoiceId: '1',
-        vendorId: '34',
+        invoiceId: 1,
+        vendorId: 34,
         invoiceNumber: 'QP58872',
         invoiceDate: '25-FEB-14',
-        invoiceTotal: '116.54',
-        paymentTotal: '116.54',
-        creditTotal: '0',
-        bankId: '4',
+        invoiceTotal: 116.54,
+        paymentTotal: 116.54,
+        creditTotal: 0,
+        bankId: 4,
         currency: 'CLP',
       },
     ];
 
     jest
       .spyOn(mockHttpClient, 'get')
-      .mockImplementation(() => Promise.resolve(expectedGetData));
+      .mockImplementation(() => Promise.resolve({ data: expectedGetData }));
 
     const result = await invoiceDataSource.get();
     expect(result).toStrictEqual(expectedResult);
