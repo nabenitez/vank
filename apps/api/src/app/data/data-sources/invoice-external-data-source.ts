@@ -17,14 +17,14 @@ export class InvoiceExternalDataSource implements InvoiceAPIDataSource {
     const resultInJson = await csv().fromString(data);
     const filterResultAttributes = () =>
       resultInJson.map((invoice) => ({
-        invoiceId: invoice.INVOICE_ID,
-        vendorId: invoice.VENDOR_ID,
+        invoiceId: Number(invoice.INVOICE_ID),
+        vendorId: Number(invoice.VENDOR_ID),
         invoiceNumber: invoice.INVOICE_NUMBER,
         invoiceDate: invoice.INVOICE_DATE,
-        invoiceTotal: invoice.INVOICE_TOTAL,
-        paymentTotal: invoice.PAYMENT_TOTAL,
-        creditTotal: invoice.CREDIT_TOTAL,
-        bankId: invoice.BANK_ID,
+        invoiceTotal: Number(invoice.INVOICE_TOTAL),
+        paymentTotal: Number(invoice.PAYMENT_TOTAL),
+        creditTotal: Number(invoice.CREDIT_TOTAL),
+        bankId: Number(invoice.BANK_ID),
         currency: invoice.CURRENCY,
       }));
     return filterResultAttributes();
