@@ -48,7 +48,13 @@ export class RedisInvoiceDataSource implements InvoiceDataSource {
 
   async updateAll(invoices: string): Promise<boolean> {
     await this.cacheClient.set(this.invoicesKey, invoices);
-    console.log('invoices updated');
+    console.log('invoices updated in cache');
+    return true;
+  }
+
+  async updateConversionRates(conversionRates: string): Promise<boolean> {
+    await this.cacheClient.set('conversionRates', conversionRates);
+    console.log('conversionRates updated in cache');
     return true;
   }
 }

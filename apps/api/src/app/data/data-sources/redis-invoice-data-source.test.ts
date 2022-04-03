@@ -132,4 +132,20 @@ describe('Invoice redis datasource', () => {
       expect(result).toBe(true);
     });
   });
+
+  describe('updateConversionRates', () => {
+    test('should return OK on update', async () => {
+      jest
+        .spyOn(mockCacheClient, 'set')
+        .mockImplementationOnce(() => Promise.resolve('OK'));
+      const redisInvoiceDataSource = new RedisInvoiceDataSource(
+        mockCacheClient,
+        'conversionRates'
+      );
+      const result = await redisInvoiceDataSource.updateConversionRates(
+        'object-with-conversion-rates'
+      );
+      expect(result).toBe(true);
+    });
+  });
 });
