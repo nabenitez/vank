@@ -15,3 +15,12 @@ export function validate(validations) {
     res.status(400).json({ errors: errors.array() });
   };
 }
+
+export function validateCurrency(value) {
+  /* istanbul ignore next */
+  if (!['CLP', 'USD', 'EUR'].includes(value))
+    //needs E2E tests
+    /* istanbul ignore next */
+    throw new Error('currency is not valid');
+  return true;
+}

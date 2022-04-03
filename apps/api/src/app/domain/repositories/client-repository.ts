@@ -15,4 +15,8 @@ export class ClientRepositoryImpl implements ClientRepository {
   async updateClient(fields: IClientUpdate) {
     return await this.clientDataSource.update(fields);
   }
+
+  async getClient(internalCode: string) {
+    return await this.clientDataSource.get(internalCode);
+  }
 }

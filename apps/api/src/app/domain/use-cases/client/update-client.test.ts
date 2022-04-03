@@ -10,6 +10,9 @@ describe('Create client Use case', () => {
     updateClient(fields: IClientUpdate): Promise<boolean> {
       throw new Error('Method not implemented.');
     }
+    getClient(internalCode: string): Promise<IClient> {
+      throw new Error('Method not implemented.');
+    }
   }
 
   let mockClientRepository: ClientRepository;

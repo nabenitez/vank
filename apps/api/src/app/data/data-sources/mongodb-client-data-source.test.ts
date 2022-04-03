@@ -8,6 +8,7 @@ describe('MongoDB datasource', () => {
     mockDatabase = {
       insertOne: jest.fn(),
       updateOne: jest.fn(),
+      find: jest.fn(),
     };
   });
 
@@ -35,7 +36,7 @@ describe('MongoDB datasource', () => {
     expect(result).toBe(inputData);
   });
 
-  test('should create a record', async () => {
+  test('should update a record', async () => {
     const inputData = {
       id: 'test-id',
       tributaryId: 'idtribu',
@@ -51,5 +52,25 @@ describe('MongoDB datasource', () => {
     const { id, ...rest } = inputData;
     expect(mockDatabase.updateOne).toHaveBeenCalledWith(id, rest);
     expect(result).toBe(true);
+  });
+
+  test('should get a record', async () => {
+    const client = {
+      companyName: 'internal company',
+      internalCode: 'aa12345',
+      tributaryId: 'idtribu',
+      currency: 'USD',
+      monthlyApiCallsFee: 100,
+      allowedBanks: [1, 2, 3],
+    };
+    const clientDataSource = new MongoDBClientDataSource(mockDatabase);
+    jest
+      .spyOn(mockDatabase, 'find')
+      .mockImplementation(() => Promise.resolve(client));
+
+    const result = await clientDataSource.get('test-1');
+
+    expect(mockDatabase.find).toHaveBeenCalledWith({ internalCode: 'test-1' });
+    expect(result).toBe(client);
   });
 });
