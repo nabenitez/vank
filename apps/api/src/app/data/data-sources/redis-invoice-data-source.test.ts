@@ -127,7 +127,7 @@ describe('Invoice redis datasource', () => {
       const invoicesKey = 'invoices';
       jest
         .spyOn(mockCacheClient, 'set')
-        .mockImplementationOnce(() => Promise.resolve(true));
+        .mockImplementationOnce(() => Promise.resolve('OK'));
       const redisInvoiceDataSource = new RedisInvoiceDataSource(
         mockCacheClient,
         invoicesKey

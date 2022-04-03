@@ -24,23 +24,14 @@ export class RedisInvoiceDataSource implements InvoiceDataSource {
 
       // find query in cache
       const searchKey = JSON.stringify(filter);
-      const queryInCache = await this.cacheClient.get<string>(
-        this.invoicesKey,
-        searchKey
-      );
+      console.log('searchKey', searchKey);
+      const queryInCache = await this.cacheClient.get(searchKey);
       if (queryInCache) return JSON.parse(queryInCache);
-      console.log('query-in-cache', queryInCache);
 
       // if not result in cache should get all invoices and filter the data
-      const allInvoicesInCache = await this.cacheClient.get<string>(
-        this.invoicesKey,
-        'all'
-      );
-
-      console.log('allinvoices in cache', allInvoicesInCache);
+      const allInvoicesInCache = await this.cacheClient.get(this.invoicesKey);
 
       const invoices = JSON.parse(JSON.parse(allInvoicesInCache));
-      console.log('invoices after parse', invoices);
 
       // function only applies if param is defined
       const filteredByVendor = filterByVendor(invoices, vendor);
@@ -48,16 +39,14 @@ export class RedisInvoiceDataSource implements InvoiceDataSource {
       const convertedCurrency = convertCurrency(filteredByDate, currency);
       return convertedCurrency;
     } else {
-      const result = await this.cacheClient.get<string>(
-        this.invoicesKey,
-        'all'
-      );
+      const result = await this.cacheClient.get(this.invoicesKey);
       return JSON.parse(result);
     }
   }
 
   async updateAll(invoices: string): Promise<boolean> {
-    await this.cacheClient.set<string>(this.invoicesKey, 'all', invoices);
+    await this.cacheClient.set(this.invoicesKey, invoices);
+    console.log('invoices updated');
     return true;
   }
 }
