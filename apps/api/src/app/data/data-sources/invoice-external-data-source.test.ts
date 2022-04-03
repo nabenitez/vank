@@ -15,12 +15,6 @@ describe('Invoice external datasource', () => {
   });
 
   test('should return invoices in json format', async () => {
-    const inputData = {
-      id: 'test-id',
-      tributaryId: 'idtribu',
-      currency: 'CLP',
-    };
-
     const fakeUrl = 'https://github.com/invoices.csv';
     const invoiceDataSource = new InvoiceExternalDataSource(
       mockHttpClient,
