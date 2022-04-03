@@ -7,16 +7,14 @@ import csv from 'csvtojson';
 
 export class InvoiceExternalDataSource implements InvoiceAPIDataSource {
   private httpClient: HttpClientWrapper;
-  private url: string;
 
-  constructor(httpClient: HttpClientWrapper, url: string) {
+  constructor(httpClient: HttpClientWrapper) {
     this.httpClient = httpClient;
-    this.url = url;
   }
 
   async get(): Promise<IInvoiceExternal[]> {
-    const result = await this.httpClient.get<string>(this.url);
-    const resultInJson = await csv().fromString(result);
+    const { data } = await this.httpClient.get('/');
+    const resultInJson = await csv().fromString(data);
     const filterResultAttributes = () =>
       resultInJson.map((invoice) => ({
         invoiceId: invoice.INVOICE_ID,
