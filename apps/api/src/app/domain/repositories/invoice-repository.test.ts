@@ -3,6 +3,10 @@ import {
   InvoiceAPIDataSource,
   IInvoiceExternal,
 } from '../../data/interfaces/invoice-api-data-source';
+import {
+  ConversionRatesAPIDataSource,
+  ConversionRate,
+} from '../../data/interfaces/conversion-rates-api-data-source';
 import { InvoiceRepository } from '../interfaces/repositories/invoice-repository';
 import { InvoiceRepositoryImpl } from './invoice-repository';
 import { IInvoiceFilter, IInvoiceResponse } from '@vank/shared-types';
@@ -14,6 +18,9 @@ class MockInvoiceDataSource implements InvoiceDataSource {
   updateAll(): Promise<boolean> {
     throw new Error('Method not implemented.');
   }
+  updateConversionRates(): Promise<boolean> {
+    throw new Error('Method not implemented.');
+  }
 }
 
 class MockInvoiceAPIDataSource implements InvoiceAPIDataSource {
@@ -21,19 +28,27 @@ class MockInvoiceAPIDataSource implements InvoiceAPIDataSource {
     throw new Error('Method not implemented.');
   }
 }
+class MockConversionRatesAPIDataSource implements ConversionRatesAPIDataSource {
+  get(): Promise<ConversionRate> {
+    throw new Error('Method not implemented.');
+  }
+}
 
 describe('Invoice repository', () => {
   let mockInvoiceDataSource: MockInvoiceDataSource;
   let mockInvoiceAPIDataSource: MockInvoiceAPIDataSource;
+  let mockConversionRatesAPIDataSource: MockConversionRatesAPIDataSource;
   let invoiceRepository: InvoiceRepository;
 
   beforeEach(() => {
     jest.clearAllMocks();
     mockInvoiceDataSource = new MockInvoiceDataSource();
     mockInvoiceAPIDataSource = new MockInvoiceAPIDataSource();
+    mockConversionRatesAPIDataSource = new MockConversionRatesAPIDataSource();
     invoiceRepository = new InvoiceRepositoryImpl(
       mockInvoiceAPIDataSource,
-      mockInvoiceDataSource
+      mockInvoiceDataSource,
+      mockConversionRatesAPIDataSource
     );
   });
 
@@ -86,6 +101,36 @@ describe('Invoice repository', () => {
       .spyOn(mockInvoiceDataSource, 'updateAll')
       .mockImplementation(() => Promise.resolve(true));
     const updateResult = await invoiceRepository.updateInvoices();
+    expect(updateResult).toBe(true);
+  });
+
+  test('should make a get call to conversion rates api', async () => {
+    const fromCLPConversion = {
+      EUR_CLP: 869.601006,
+      USD_CLP: 787.079441,
+    };
+    const fromEURConversion = {
+      CLP_EUR: 0.00115,
+      USD_EUR: 0.905104,
+    };
+    const fromUSDConversion = {
+      CLP_USD: 0.001271,
+      EUR_USD: 1.104845,
+    };
+    const getResult = {
+      ...fromCLPConversion,
+      ...fromEURConversion,
+      ...fromUSDConversion,
+    };
+
+    jest
+      .spyOn(mockInvoiceDataSource, 'updateConversionRates')
+      .mockImplementation(() => Promise.resolve(true));
+
+    jest
+      .spyOn(mockConversionRatesAPIDataSource, 'get')
+      .mockImplementation(() => Promise.resolve(getResult));
+    const updateResult = await invoiceRepository.updateConversionRates();
     expect(updateResult).toBe(true);
   });
 });
