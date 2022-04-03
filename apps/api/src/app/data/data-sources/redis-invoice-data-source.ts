@@ -37,7 +37,16 @@ export class RedisInvoiceDataSource implements InvoiceDataSource {
       // function only applies if param is defined
       const filteredByVendor = filterByVendor(invoices, vendor);
       const filteredByDate = filterByDate(filteredByVendor, invoiceDate);
-      const convertedCurrency = convertCurrency(filteredByDate, currency);
+
+      const conversionRates = JSON.parse(
+        await this.cacheClient.get('conversionRates')
+      );
+      console.log('found conversionRates', conversionRates);
+      const convertedCurrency = convertCurrency(
+        filteredByDate,
+        currency,
+        conversionRates
+      );
       await this.cacheClient.set(searchKey, JSON.stringify(convertedCurrency));
       return convertedCurrency;
     } else {
