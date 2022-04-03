@@ -13,19 +13,6 @@ export async function getConversionRatesAPI() {
     timeout: 5000,
   });
 
-  client.interceptors.request.use(
-    function (config) {
-      // Do something before request is sent
-      console.log('config axios');
-      console.log(config);
-      return config;
-    },
-    function (error) {
-      // Do something with request error
-      return Promise.reject(error);
-    }
-  );
-
   const invoicesAPIClient: HttpClientWrapper = {
     get: (path) => client.get('', { params: { q: path } }),
   };
