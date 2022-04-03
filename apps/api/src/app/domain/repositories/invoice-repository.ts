@@ -21,7 +21,7 @@ export class InvoiceRepositoryImpl implements InvoiceRepository {
   }
 
   async updateInvoices(): Promise<boolean> {
-    const invoices = this.invoiceAPIDataSource.get();
+    const invoices = await this.invoiceAPIDataSource.get();
     const stringifiedInvoices = JSON.stringify(invoices);
     return await this.invoiceDataSource.updateAll(stringifiedInvoices);
   }
