@@ -1,17 +1,7 @@
-import { IInvoiceFilter, IInvoiceResponse } from '@vank/shared-types';
-import { InvoiceRepository } from '../../interfaces/repositories/invoice-repository';
 import { UpdateInvoices } from './update-invoices';
+import { MockInvoiceRepository } from './mock-repository';
 
 describe('Get invoices use case', () => {
-  class MockInvoiceRepository implements InvoiceRepository {
-    getInvoices(filter: IInvoiceFilter): Promise<IInvoiceResponse[]> {
-      throw new Error('Method not implemented.');
-    }
-    updateInvoices(): Promise<boolean> {
-      throw new Error('Method not implemented.');
-    }
-  }
-
   let mockInvoiceRepository: MockInvoiceRepository;
 
   beforeEach(() => {
