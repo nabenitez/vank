@@ -18,7 +18,12 @@ export default function InvoiceRouter(getInvoicesUseCase: GetInvoicesUseCase) {
     async (req: Request, res: Response) => {
       try {
         const filteredParams = getFilteredInvoiceQuery(req.query);
-        const invoices = await getInvoicesUseCase.execute(filteredParams);
+        const nonFilter = Object.values(filteredParams).every(
+          (param) => param === undefined
+        );
+        const invoices = await getInvoicesUseCase.execute(
+          nonFilter ? null : filteredParams
+        );
         res.statusCode = 200;
         res.send(invoices);
       } catch (err) {

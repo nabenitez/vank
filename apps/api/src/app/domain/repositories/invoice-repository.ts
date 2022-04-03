@@ -16,7 +16,9 @@ export class InvoiceRepositoryImpl implements InvoiceRepository {
     this.invoiceDataSource = invoiceDataSource;
   }
 
-  async getInvoices(filter: IInvoiceFilter): Promise<IInvoiceResponse[]> {
+  async getInvoices(
+    filter: IInvoiceFilter | null
+  ): Promise<IInvoiceResponse[]> {
     return await this.invoiceDataSource.getAll(filter);
   }
 
