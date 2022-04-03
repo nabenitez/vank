@@ -27,16 +27,18 @@ export class RedisInvoiceDataSource implements InvoiceDataSource {
       console.log('searchKey', searchKey);
       const queryInCache = await this.cacheClient.get(searchKey);
       if (queryInCache) return JSON.parse(queryInCache);
+      console.log('query not found in cache');
 
       // if not result in cache should get all invoices and filter the data
       const allInvoicesInCache = await this.cacheClient.get(this.invoicesKey);
 
-      const invoices = JSON.parse(JSON.parse(allInvoicesInCache));
+      const invoices = JSON.parse(allInvoicesInCache);
 
       // function only applies if param is defined
       const filteredByVendor = filterByVendor(invoices, vendor);
       const filteredByDate = filterByDate(filteredByVendor, invoiceDate);
       const convertedCurrency = convertCurrency(filteredByDate, currency);
+      await this.cacheClient.set(searchKey, JSON.stringify(convertedCurrency));
       return convertedCurrency;
     } else {
       const result = await this.cacheClient.get(this.invoicesKey);
