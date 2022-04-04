@@ -24,7 +24,7 @@ describe('Create client Use case', () => {
 
   test('should return true', async () => {
     const inputData = {
-      id: 'id',
+      internalCode: 'id',
       tributaryId: 'idtribu',
       currency: 'CLP',
     };

@@ -38,7 +38,7 @@ describe('MongoDB datasource', () => {
 
   test('should update a record', async () => {
     const inputData = {
-      id: 'test-id',
+      internalCode: 'test-id',
       tributaryId: 'idtribu',
       currency: 'CLP',
     };
@@ -49,8 +49,8 @@ describe('MongoDB datasource', () => {
 
     const result = await clientDataSource.update(inputData);
 
-    const { id, ...rest } = inputData;
-    expect(mockDatabase.updateOne).toHaveBeenCalledWith(id, rest);
+    const { internalCode, ...rest } = inputData;
+    expect(mockDatabase.updateOne).toHaveBeenCalledWith(internalCode, rest);
     expect(result).toBe(true);
   });
 

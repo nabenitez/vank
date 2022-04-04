@@ -15,7 +15,7 @@ export function getCreateClientValidations() {
 
 export function getUpdateClientValidations() {
   return [
-    body('id').isString().notEmpty(),
+    body('internalCode').isString().notEmpty(),
     body('tributaryId').isString().isLength({ max: 80 }).optional(),
     body('currency').custom(validateCurrency).optional(),
   ];
@@ -36,7 +36,7 @@ export function getFilteredClientUpdate(
   requestBody: IClientUpdate
 ): IClientUpdate {
   return {
-    id: requestBody.id,
+    internalCode: requestBody.internalCode,
     tributaryId: requestBody.tributaryId,
     currency: requestBody.currency,
   };

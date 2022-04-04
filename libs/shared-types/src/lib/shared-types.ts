@@ -12,7 +12,7 @@ export interface IClientResponse {
 }
 
 export interface IClientUpdate {
-  id: string;
+  internalCode: string;
   tributaryId: string;
   currency: string;
 }

@@ -46,7 +46,7 @@ describe('Client repository', () => {
   describe('updateClient', () => {
     test('should make update call', async () => {
       const inputData = {
-        id: 'test-id',
+        internalCode: 'test-id',
         tributaryId: 'idtribu',
         currency: 'USD',
       };

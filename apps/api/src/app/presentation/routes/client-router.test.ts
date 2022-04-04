@@ -66,7 +66,7 @@ describe('Contact Router', () => {
 
   describe('PATCH /client', () => {
     const inputData = {
-      id: 'id-value',
+      internalCode: 'id-value',
       tributaryId: 'idtribu',
       currency: 'CLP',
     };

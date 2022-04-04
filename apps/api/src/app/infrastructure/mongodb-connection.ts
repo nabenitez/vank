@@ -16,10 +16,10 @@ export async function getMongoDBDS() {
 
   const clientDatabase: NoSQLDatabaseWrapper = {
     insertOne: (doc) => clientsDB.collection('clients').insertOne(doc),
-    updateOne: (id, data) => {
+    updateOne: (internalCode, data) => {
       return clientsDB
         .collection('clients')
-        .updateOne({ _id: new ObjectId(id) }, { $set: data });
+        .updateOne({ internalCode }, { $set: data });
     },
     find: (query) => clientsDB.collection('clients').findOne(query),
   };
