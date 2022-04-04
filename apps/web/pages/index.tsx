@@ -1,27 +1,34 @@
 import * as React from 'react';
 import type { NextPage } from 'next';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import { Box, Container } from '@mui/material';
+import Home from './../src/components/home';
+import { useHome } from './../src/hooks/use-home';
 
-const Home: NextPage = () => {
+const Landing: NextPage = () => {
+  const {
+    internalCode,
+    handleOnChangeInternalCode,
+    handleOnClickInvoices,
+    handleOnClickSettings,
+  } = useHome();
   return (
-    <Container maxWidth="lg">
-      <Box
-        sx={{
-          my: 4,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <Typography variant="h4" component="h1" gutterBottom>
-          Vank App
-        </Typography>
-      </Box>
-    </Container>
+    <Box
+      component="main"
+      sx={{
+        display: 'flex',
+        height: '100vh',
+      }}
+    >
+      <Container maxWidth="sm" sx={{ my: 'auto' }}>
+        <Home
+          internalCode={internalCode}
+          handleOnChangeInternalCode={handleOnChangeInternalCode}
+          handleOnClickInvoices={handleOnClickInvoices}
+          handleOnClickSettings={handleOnClickSettings}
+        />
+      </Container>
+    </Box>
   );
 };
 
-export default Home;
+export default Landing;
