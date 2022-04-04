@@ -1,0 +1,295 @@
+{
+	"info": {
+		"_postman_id": "3779a18f-c4b9-4104-b964-b0dbf2d52994",
+		"name": "vank",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/client",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"companyName\": \"vank-1\",\n    \"internalCode\": \"vank-1\",\n    \"tributaryId\": \"tributaryId-vank-1\",\n    \"currency\": \"CLP\",\n    \"monthlyApiCallsFee\": 100,\n    \"allowedBanks\": [1, 2]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://whispering-scrubland-81882.herokuapp.com/client",
+					"protocol": "https",
+					"host": [
+						"whispering-scrubland-81882",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"client"
+					]
+				},
+				"description": "vank create-client"
+			},
+			"response": []
+		},
+		{
+			"name": "/client",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":\"624a320ab722616558071d7d\",\n    \"tributaryId\": \"vank-1-1\",\n    \"currency\": \"USD\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://whispering-scrubland-81882.herokuapp.com/client",
+					"protocol": "https",
+					"host": [
+						"whispering-scrubland-81882",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"client"
+					]
+				},
+				"description": "vank-update-client"
+			},
+			"response": []
+		},
+		{
+			"name": "/invoice/:internalCode",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://whispering-scrubland-81882.herokuapp.com/invoice/:internalCode",
+					"protocol": "https",
+					"host": [
+						"whispering-scrubland-81882",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"invoice",
+						":internalCode"
+					],
+					"query": [
+						{
+							"key": "invoiceDate",
+							"value": "02-MAR-08,01-FEB-31",
+							"disabled": true
+						},
+						{
+							"key": "vendor",
+							"value": "34",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "internalCode",
+							"value": "vank-1"
+						}
+					]
+				},
+				"description": "vank get-invoices without filters"
+			},
+			"response": []
+		},
+		{
+			"name": "/invoice/:internalCode?vendor=82",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://whispering-scrubland-81882.herokuapp.com/invoice/:internalCode?vendor=82",
+					"protocol": "https",
+					"host": [
+						"whispering-scrubland-81882",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"invoice",
+						":internalCode"
+					],
+					"query": [
+						{
+							"key": "vendor",
+							"value": "82"
+						}
+					],
+					"variable": [
+						{
+							"key": "internalCode",
+							"value": "vank-1"
+						}
+					]
+				},
+				"description": "vank get-invoices with vendorId filter "
+			},
+			"response": []
+		},
+		{
+			"name": "/invoice/:internalCode?invoiceDate=16-APR-14,18-APR-14",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://whispering-scrubland-81882.herokuapp.com/invoice/:internalCode?invoiceDate=16-APR-14,18-APR-14",
+					"protocol": "https",
+					"host": [
+						"whispering-scrubland-81882",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"invoice",
+						":internalCode"
+					],
+					"query": [
+						{
+							"key": "invoiceDate",
+							"value": "16-APR-14,18-APR-14"
+						}
+					],
+					"variable": [
+						{
+							"key": "internalCode",
+							"value": ""
+						}
+					]
+				},
+				"description": "vank get-invoices with invoiceDate filter "
+			},
+			"response": []
+		},
+		{
+			"name": "/invoice/:internalCode?invoiceDate=16-APR-14,18-APR-14&currency=CLP",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://whispering-scrubland-81882.herokuapp.com/invoice/:internalCode?invoiceDate=16-APR-14,18-APR-14&currency=CLP",
+					"protocol": "https",
+					"host": [
+						"whispering-scrubland-81882",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"invoice",
+						":internalCode"
+					],
+					"query": [
+						{
+							"key": "invoiceDate",
+							"value": "16-APR-14,18-APR-14"
+						},
+						{
+							"key": "currency",
+							"value": "CLP"
+						}
+					],
+					"variable": [
+						{
+							"key": "internalCode",
+							"value": "vank-1"
+						}
+					]
+				},
+				"description": "vank get-invoices with invoiceDate filter and currency conversion to EUR->CLP "
+			},
+			"response": []
+		},
+		{
+			"name": " /invoice/:internalCode?invoiceDate=16-APR-14,18-APR-14&currency=USD",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://whispering-scrubland-81882.herokuapp.com/invoice/:internalCode?invoiceDate=16-APR-14,18-APR-14&currency=USD",
+					"protocol": "https",
+					"host": [
+						"whispering-scrubland-81882",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"invoice",
+						":internalCode"
+					],
+					"query": [
+						{
+							"key": "invoiceDate",
+							"value": "16-APR-14,18-APR-14"
+						},
+						{
+							"key": "currency",
+							"value": "USD"
+						}
+					],
+					"variable": [
+						{
+							"key": "internalCode",
+							"value": "vank-1"
+						}
+					]
+				},
+				"description": "vank get-invoices with invoiceDate filter and currency conversion EUR -> USD"
+			},
+			"response": []
+		},
+		{
+			"name": " /invoice/:internalCode?invoiceDate=26-APR-14,27-APR-14&vendor=122&currency=CLP",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://whispering-scrubland-81882.herokuapp.com/invoice/:internalCode?invoiceDate=26-APR-14,27-APR-14&vendor=122&currency=CLP",
+					"protocol": "https",
+					"host": [
+						"whispering-scrubland-81882",
+						"herokuapp",
+						"com"
+					],
+					"path": [
+						"invoice",
+						":internalCode"
+					],
+					"query": [
+						{
+							"key": "invoiceDate",
+							"value": "26-APR-14,27-APR-14"
+						},
+						{
+							"key": "vendor",
+							"value": "122"
+						},
+						{
+							"key": "currency",
+							"value": "CLP"
+						}
+					],
+					"variable": [
+						{
+							"key": "internalCode",
+							"value": "vank-1"
+						}
+					]
+				},
+				"description": "vank get-invoices with vendorId, invoiceDate filter and currency conversion USD->CLP"
+			},
+			"response": []
+		}
+	]
+}

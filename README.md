@@ -1,94 +1,115 @@
+# Vank
 
+# Description
 
-# VankV2
+# Roadmap
 
-This project was generated using [Nx](https://nx.dev).
+- [x] `/client` resource allows create and edit.
+- [x] `/invoice` resource allows retrieve data about invoices, also can filter and convert output currency.
+- [] Web application.
+- [x] Store and refresh invoices from csv (schedule job).
+- [x] Store and refresh conversion rates from API.
+- [x] Cache strategy for invoices queries through Redis.
+- [x] Typescript.
+- [x] Unit tests.
+- [x] PaaS deployed.
+- [x] Docs.
+- [x] Development setup.
+- [x] Clean architecture.
+- [] docker-compose to run the entire system.
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+# API
 
-🔎 **Smart, Fast and Extensible Build System**
+The API has two resources `/client` and `/invoice`. You can find the documentation in the following url: [Vank Documentation](https://documenter.getpostman.com/view/20338556/UVysxbYr). Also you can download the collection from this repository in `/docs/vank-postman`.
 
-## Adding capabilities to your workspace
+# Infrastructure
 
-Nx supports many plugins which add capabilities for developing different types of applications and different tools.
+The system is running in different cloud platforms, these are:
 
-These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
+[Heroku](https://www.heroku.com/): here runs the API, it has a CI/CD workflow through Github Actions (CI) and Heroku Service (CD).
 
-Below are our core plugins:
+[Vercel](https://vercel.com/): here run the web application, it has a CI/CD setup provided by Vercel.
 
-- [React](https://reactjs.org)
-  - `npm install --save-dev @nrwl/react`
-- Web (no framework frontends)
-  - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
-- [Nest](https://nestjs.com)
-  - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
-- [Node](https://nodejs.org)
-  - `npm install --save-dev @nrwl/node`
+[Render](https://render.com/): here is the Redis Cache layer, it's free.
 
-There are also many [community plugins](https://nx.dev/community) you could add.
+[CloudMongo](https://www.mongodb.com/es/cloud/atlas/register): here is the MongoDB instance, also free.
 
-## Generate an application
+# Architecture
 
-Run `nx g @nrwl/react:app my-app` to generate an application.
+![C4 context](docs/images/vank-c4-context.png?raw=true)
 
-> You can use any of the plugins above to generate applications as well.
+### The system context shows the main software systems which allows the operation of Vank.
 
-When using Nx, you can create multiple applications and libraries in the same workspace.
+![C3 containers](docs/images/vank-c3-containers.png?raw=true)
 
-## Generate a library
+### This diagram shows the principal containers of the system.
 
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
+# Development setup
 
-> You can also use any of the plugins above to generate libraries as well.
+You will need a `.env` file with the following variables:
 
-Libraries are shareable across libraries and applications. They can be imported from `@vank-v2/mylib`.
+```
+MONGO_DB_URL
+REDIS_URL
+INVOICES_URL=https://gist.githubusercontent.com/rogelio-meza-t/f70a484ec20b8ea43c67f95a58597c29/raw/41f289c605718e923fc1fad0539530e4d0413a90/invoices.csv
+CONVERSION_RATES_URL=https://free.currconv.com/api/v7/convert?compact=ultra
+CONVERSION_RATES_API_KEY
+```
 
-## Development server
+**Disclaimer:** Explicit values are public, so there isn't a risk.
 
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+Create a free mongo database [here](https://www.mongodb.com/es/cloud/atlas/register)
 
-## Code scaffolding
+Create a free redis instance [here](https://render.com/)
 
-Run `nx g @nrwl/react:component my-component --project=my-app` to generate a new component.
+Get a currency conversion api key [here](https://free.currencyconverterapi.com/)
 
-## Build
+Then you need to install the dependencies with:
 
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+```
+yarn
+```
 
-## Running unit tests
+or
 
-Run `nx test my-app` to execute the unit tests via [Jest](https://jestjs.io).
+```
+npm install
+```
 
-Run `nx affected:test` to execute the unit tests affected by a change.
+Also you need the Nx CLI to run the apps in the Nx Workspace. You can install the CLI with:
 
-## Running end-to-end tests
+```
+npm install -g nx
+```
 
-Run `nx e2e my-app` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
+With that dependencies you can run the **frontend** with:
 
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
+```
+nx serve web
+```
 
-## Understand your workspace
+and the **api** with:
 
-Run `nx graph` to see a diagram of the dependencies of your projects.
+```
+nx serve api
+```
 
-## Further help
+Finally, navigate to the **frontend** url and also you can test the API with the file in `/docs/vank-postman/vank.postman_collection.json`
 
-Visit the [Nx Documentation](https://nx.dev) to learn more.
+# Tests
 
+Currently the **api** tests has a 100% coverage. You can run the tests in the development enviroment with the following command:
 
+```
+nx test api --silent --verbose --coverage
+```
 
-## ☁ Nx Cloud
+the flags gives a better dev experience.
 
-### Distributed Computation Caching & Distributed Task Execution
+# Dev Tools
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
+[Nx](https://nx.dev): Monorepo buildsystem.
 
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
+[NextJS](https://nextjs.org/): React framework with amazing features.
 
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.
+[MUI](https://mui.com/): Design system which allows to develop apps faster.
