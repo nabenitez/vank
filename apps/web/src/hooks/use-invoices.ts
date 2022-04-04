@@ -47,14 +47,13 @@ export const useInvoices = () => {
 
   const { isLoading, error, data, isFetching } = useQuery(
     ['invoices', query],
-    () =>
-      getInvoices(internalCode, query)
-        .then(() =>
-          enqueueSnackbar('User successfully updated', { variant: 'success' })
-        )
-        .catch((err) => {
-          enqueueSnackbar('Something went wrong', { variant: 'error' });
-        }),
+    () => {
+      console.log('internal', internalCode);
+      return getInvoices(internalCode, query).catch((err) => {
+        enqueueSnackbar('Something went wrong', { variant: 'error' });
+      });
+    },
+
     { enabled: !!internalCode }
   );
 
