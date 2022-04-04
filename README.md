@@ -36,11 +36,19 @@ The system is running in different cloud platforms, these are:
 
 # Architecture
 
+## System context
+
 ![C4 context](docs/images/vank-c4-context.png?raw=true)
+
+## System containers
 
 ### The system context shows the main software systems which allows the operation of Vank.
 
 ![C3 containers](docs/images/vank-c3-containers.png?raw=true)
+
+## System components
+
+![C3 containers](docs/images/vank-c2-components.png?raw=true)
 
 ### This diagram shows the principal containers of the system.
 
