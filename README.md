@@ -23,7 +23,7 @@ The API has two resources `/client` and `/invoice`. You can find the documentati
 # Web
 
 There is a minimal app built with NextJS, which allow you to test some of the API
-functionalities. Check the app [here](https://vank.vercel.app/) .
+functionalities. Check the app [here](https://vank.vercel.app/) . You need to use a valid internal code to see the invoices. You can use `vank-1` or create one through the internal API endpoint.
 
 # Infrastructure
 
