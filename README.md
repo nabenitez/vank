@@ -1,12 +1,10 @@
 # Vank
 
-# Description
-
 # Roadmap
 
 - [x] `/client` resource allows create and edit.
 - [x] `/invoice` resource allows retrieve data about invoices, also can filter and convert output currency.
-- [] Web application.
+- [x] Web application.
 - [x] Store and refresh invoices from csv (schedule job).
 - [x] Store and refresh conversion rates from API.
 - [x] Cache strategy for invoices queries through Redis.
@@ -21,6 +19,11 @@
 # API
 
 The API has two resources `/client` and `/invoice`. You can find the documentation in the following url: [Vank Documentation](https://documenter.getpostman.com/view/20338556/UVysxbYr). Also you can download the collection from this repository in `/docs/vank-postman`.
+
+# Web
+
+There is a minimal app built with NextJS, which allow you to test some of the API
+functionalities. Check the app [here](https://vank.vercel.app/) .
 
 # Infrastructure
 
