@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "3779a18f-c4b9-4104-b964-b0dbf2d52994",
+		"_postman_id": "109b5afc-6b51-4494-9bbf-1a4d48bab5d0",
 		"name": "vank",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -42,7 +42,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"id\":\"624a320ab722616558071d7d\",\n    \"tributaryId\": \"vank-1-1\",\n    \"currency\": \"USD\"\n}",
+					"raw": "{\n    \"internalCode\":\"vank-1\",\n    \"tributaryId\": \"vank-1-1\",\n    \"currency\": \"EUR\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -101,7 +101,7 @@
 						}
 					]
 				},
-				"description": "vank get-invoices without filters"
+				"description": "vank get invoices\n\nThis endpoint require a **internalCode** param to get client invoices. Also allows multiple query params which are:\n\n| **Param** | **Type** | **Description** |\n| --- | --- | --- |\n| **invoiceDate** | **String** | This param have to be in **startDate,endDate** format and also the dates are in **DD-MM-YY** format. |\n| **vendor** | **Number** | This param is the **vendorId** which is present in invoices. |\n| **currency** | **String** | This param allows to convert the output currency. Possible values are: CLP, USD or EUR. |\n\nOne or more query params can be used."
 			},
 			"response": []
 		},
@@ -165,7 +165,7 @@
 					"variable": [
 						{
 							"key": "internalCode",
-							"value": ""
+							"value": "vank-1"
 						}
 					]
 				},
