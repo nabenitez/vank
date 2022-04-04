@@ -37,7 +37,13 @@ const InvoicesPage: NextPage = () => {
           <Loading />
         ) : (
           <>
-            <Invoices data={data} />
+            {data && <Invoices data={data} />}
+            {!data && (
+              <>
+                Oops. Something went wrong. Check that you have a valid
+                internalCode or refresh the page.
+              </>
+            )}
           </>
         )}
       </Container>

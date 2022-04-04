@@ -54,7 +54,7 @@ export const useInvoices = () => {
       });
     },
 
-    { enabled: !!internalCode }
+    { retry: false, enabled: !!internalCode }
   );
 
   const redirectToSettings = () =>
