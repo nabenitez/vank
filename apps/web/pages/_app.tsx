@@ -10,6 +10,11 @@ import * as React from 'react';
 import { CacheProvider, EmotionCache } from '@emotion/react';
 import theme from './../src/theme';
 import createEmotionCache from '../src/utils/create-emotion-cache';
+import { ReactQueryDevtools } from 'react-query/devtools';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { SnackbarProvider } from 'notistack';
+
+const queryClient = new QueryClient();
 
 // Client-side cache, shared for the whole session of the user in the browser.
 const clientSideEmotionCache = createEmotionCache();
@@ -30,9 +35,20 @@ function MyApp({
         <link rel="icon" type="image/jpg" sizes="32x32" href="/favicon.jpg" />
       </Head>
       <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        <Component {...pageProps} />
+        <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools initialIsOpen />
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          <SnackbarProvider
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+            maxSnack={3}
+          >
+            <Component {...pageProps} />
+          </SnackbarProvider>
+        </QueryClientProvider>
       </ThemeProvider>
     </CacheProvider>
   );
